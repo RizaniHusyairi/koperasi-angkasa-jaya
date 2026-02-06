@@ -44,9 +44,9 @@
                                         <p class="mb-1 text-sm">Tanggal: {{ $order->created_at->format('d/m/Y') }}</p>
                                     </div>
                                     <div>
-                                        <img src="{{ asset('assets/logo/logo_koperasi.png') }}" alt="image" class="mb-8" style="max-height: 40px;">
-                                        <p class="mb-1 text-sm">Koperasi Angkasa Jaya</p>
-                                        <p class="mb-0 text-sm">koperasi@angkasajaya.com</p>
+                                        <img src="{{ $setting->logo_url ?? asset('assets/logo/logo_koperasi.png') }}" alt="image" class="mb-8" style="max-height: 40px;">
+                                        <p class="mb-1 text-sm">{{ $setting->company_name ?? 'Koperasi Angkasa Jaya' }}</p>
+                                        <p class="mb-0 text-sm">{{ $setting->company_email ?? 'koperasi@angkasajaya.com' }}</p>
                                     </div>
                                 </div>
                                 <div class="py-28 px-20">

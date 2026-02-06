@@ -150,10 +150,10 @@
     <div class="invoice-container">
         <div class="invoice-header">
             <div class="company-info">
-                <img src="{{ asset('assets/logo/logo_koperasi.png') }}" alt="Koperasi Logo" class="bg-logo">
-                <h2>Koperasi Angkasa Jaya</h2>
-                <p>Jalan Raya Angkasa No. 123, Jakarta</p>
-                <p>Email: koperasi@angkasajaya.com | Telepon: (021) 1234-5678</p>
+                <img src="{{ $setting->logo_url ?? asset('assets/logo/logo_koperasi.png') }}" alt="Logo" class="bg-logo">
+                <h2>{{ $setting->company_name ?? 'Koperasi Angkasa Jaya' }}</h2>
+                <p>{{ $setting->company_address ?? 'Jalan Raya Angkasa No. 123, Jakarta' }}</p>
+                <p>Email: {{ $setting->company_email ?? 'koperasi@angkasajaya.com' }} | Telepon: {{ $setting->company_phone ?? '(021) 1234-5678' }}</p>
             </div>
             <div class="invoice-details">
                 <h1>Invoice</h1>

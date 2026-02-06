@@ -121,7 +121,15 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
     Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
     Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');
 
+    // Member list with order history
+    Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
+    Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');
+
     // Settings
+    Route::get('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'index'])->name('settings.invoice.index');
+    Route::put('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'update'])->name('settings.invoice.update');
+
+    // Profile Settings
     Route::get('/pengaturan', [AdminMiniMarketProfile::class, 'index'])->name('pengaturan.index');
     Route::put('/pengaturan/profile', [AdminMiniMarketProfile::class, 'updateProfile'])->name('pengaturan.profile');
     Route::put('/pengaturan/password', [AdminMiniMarketProfile::class, 'updatePassword'])->name('pengaturan.password');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminMiniMarket;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\MiniMarketSetting;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -18,13 +19,15 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(['user', 'orderItems.product']);
-        return view('admin-mini-market.orders.show', compact('order'));
+        $setting = MiniMarketSetting::first();
+        return view('admin-mini-market.orders.show', compact('order', 'setting'));
     }
 
     public function print(Order $order)
     {
         $order->load(['user', 'orderItems.product']);
-        return view('admin-mini-market.orders.print', compact('order'));
+        $setting = MiniMarketSetting::first();
+        return view('admin-mini-market.orders.print', compact('order', 'setting'));
     }
 
     public function update(Request $request, Order $order)
