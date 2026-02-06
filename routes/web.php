@@ -116,6 +116,7 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
     Route::get('/dashboard', [AdminMiniMarketDashboard::class, 'index'])->name('dashboard');
     Route::resource('products', AdminMiniMarketProduct::class);
     Route::resource('orders', AdminMiniMarketOrder::class);
+    Route::get('orders/{order}/print', [AdminMiniMarketOrder::class, 'print'])->name('orders.print');
     // Member list with order history
     Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
     Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');

@@ -21,6 +21,12 @@ class OrderController extends Controller
         return view('admin-mini-market.orders.show', compact('order'));
     }
 
+    public function print(Order $order)
+    {
+        $order->load(['user', 'orderItems.product']);
+        return view('admin-mini-market.orders.print', compact('order'));
+    }
+
     public function update(Request $request, Order $order)
     {
         $request->validate([

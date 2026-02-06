@@ -27,11 +27,11 @@
             <div class="card h-100">
                 <div class="card-header border-bottom bg-base py-16 px-24 d-flex justify-content-between align-items-center">
                     <h6 class="text-lg fw-semibold mb-0">Invoice #{{ $order->code }}</h6>
-                    <div class="d-flex gap-2">
-                         <button type="button" class="btn btn-sm btn-danger radius-8 d-inline-flex align-items-center gap-1" onclick="window.print()">
+                     <div class="d-flex gap-2">
+                         <a href="{{ route('admin-mini-market.orders.print', $order->id) }}" target="_blank" class="btn btn-sm btn-danger radius-8 d-inline-flex align-items-center gap-1">
                             <iconify-icon icon="basil:printer-outline" class="text-xl"></iconify-icon>
                             Print
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div class="card-body py-40">
@@ -41,10 +41,10 @@
                                 <div class="p-20 d-flex flex-wrap justify-content-between gap-3 border-bottom">
                                     <div>
                                         <h3 class="text-xl">Invoice #{{ $order->code }}</h3>
-                                        <p class="mb-1 text-sm">Date Issued: {{ $order->created_at->format('d/m/Y') }}</p>
+                                        <p class="mb-1 text-sm">Tanggal: {{ $order->created_at->format('d/m/Y') }}</p>
                                     </div>
                                     <div>
-                                        <img src="{{ asset('assets/images/logo.png') }}" alt="image" class="mb-8" style="max-height: 40px;">
+                                        <img src="{{ asset('assets/logo/logo_koperasi.png') }}" alt="image" class="mb-8" style="max-height: 40px;">
                                         <p class="mb-1 text-sm">Koperasi Angkasa Jaya</p>
                                         <p class="mb-0 text-sm">koperasi@angkasajaya.com</p>
                                     </div>
@@ -52,11 +52,11 @@
                                 <div class="py-28 px-20">
                                     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
                                         <div>
-                                            <h6 class="text-md">Issue For:</h6>
+                                            <h6 class="text-md">Tagihan Kepada:</h6>
                                             <table class="text-sm text-secondary-light">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Name</td>
+                                                        <td>Nama</td>
                                                         <td class="ps-8">: {{ $order->user->name }}</td>
                                                     </tr>
                                                     <tr>
@@ -76,7 +76,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Payment</td>
+                                                        <td>Pembayaran</td>
                                                         <td class="ps-8">: {{ $order->payment_method }}</td>
                                                     </tr>
                                                 </tbody>
@@ -86,11 +86,11 @@
                                             <table class="text-sm text-secondary-light">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Order Date</td>
+                                                        <td>Waktu Pesanan</td>
                                                         <td class="ps-8">: {{ $order->created_at->format('d M Y') }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Order ID</td>
+                                                        <td>ID Pesanan</td>
                                                         <td class="ps-8">: #{{ $order->code }}</td>
                                                     </tr>
                                                 </tbody>
@@ -104,10 +104,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th scope="col" class="text-sm">No.</th>
-                                                        <th scope="col" class="text-sm">Items</th>
-                                                        <th scope="col" class="text-sm">Qty</th>
-                                                        <th scope="col" class="text-sm">Price</th>
-                                                        <th scope="col" class="text-end text-sm">Subtotal</th>
+                                                        <th scope="col" class="text-sm">Deskripsi Barang</th>
+                                                        <th scope="col" class="text-sm">Jumlah</th>
+                                                        <th scope="col" class="text-sm">Harga Satuan</th>
+                                                        <th scope="col" class="text-end text-sm">Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -132,7 +132,7 @@
                                         </div>
                                         <div class="d-flex flex-wrap justify-content-between gap-3 mt-3">
                                             <div>
-                                                <p class="text-sm mb-0">Thanks for your business</p>
+                                                <p class="text-sm mb-0">Terima kasih telah berbelanja</p>
                                             </div>
                                             <div>
                                                 <table class="text-sm">
@@ -152,7 +152,7 @@
                                     </div>
 
                                     <div class="mt-64">
-                                        <p class="text-center text-secondary-light text-sm fw-semibold">Thank you for your purchase!</p>
+                                        <p class="text-center text-secondary-light text-sm fw-semibold">Terima kasih atas pembelian Anda!</p>
                                     </div>
                                 </div>
                             </div>
