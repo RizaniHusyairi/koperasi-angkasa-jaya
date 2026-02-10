@@ -30,7 +30,7 @@
                 <div class="bg-gradient-primary position-relative" style="height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                     <div class="position-absolute w-100 text-center" style="bottom: -50px;">
                         <div class="position-relative d-inline-block">
-                            <img src="{{ asset('assets/images/users/user1.png') }}" alt="{{ $anggota->user->name }}" 
+                            <img src="{{ $anggota->user->avatar_url }}" alt="{{ $anggota->user->name }}" 
                                 class="w-100-px h-100-px rounded-circle border border-5 border-white shadow-lg" style="object-fit: cover;">
                             <span class="position-absolute bottom-0 end-0 w-24-px h-24-px bg-{{ $anggota->status_keanggotaan == 'Aktif' ? 'success' : 'danger' }}-main rounded-circle border border-2 border-white d-flex align-items-center justify-content-center">
                                 <iconify-icon icon="{{ $anggota->status_keanggotaan == 'Aktif' ? 'mdi:check' : 'mdi:close' }}" class="text-white text-xs"></iconify-icon>
@@ -212,6 +212,17 @@
                                     </span>
                                     <h4 class="mb-0 mt-1">Rp {{ number_format($anggota->total_simpanan_pokok, 0, ',', '.') }}</h4>
                                 </div>
+                                <div class="ms-auto">
+                                    @if($anggota->total_simpanan_pokok > 0)
+                                    <button type="button" class="btn btn-sm btn-warning-600 mt-2 w-100 d-flex" data-bs-toggle="modal" data-bs-target="#modalEditSimpananPokok">
+                                        <iconify-icon icon="mdi:pencil" class="icon"></iconify-icon> Edit
+                                    </button>
+                                    @else
+                                    <button type="button" class="btn btn-sm btn-light mt-2 w-100 d-flex" data-bs-toggle="modal" data-bs-target="#modalSimpananPokok">
+                                        <iconify-icon icon="mdi:plus" class="icon"></iconify-icon> Tambah
+                                    </button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -229,6 +240,12 @@
                                         Simpanan Wajib
                                     </span>
                                     <h4 class="mb-0 mt-1">Rp {{ number_format($anggota->total_simpanan_wajib, 0, ',', '.') }}</h4>
+                                </div>
+                                <div class="ms-auto">
+                                    <button type="button" class="btn btn-sm btn-primary mt-2 w-100 d-flex" data-bs-toggle="modal" data-bs-target="#modalSimpananWajib">
+                                        <iconify-icon icon="mdi:plus" class="icon"></iconify-icon> Tambah
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -341,10 +358,46 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">Riwayat Simpanan Wajib</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Bayar</th>
+                                    <th>Bulan</th>
+                                    <th>Jumlah</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($anggota->simpananWajib()->orderBy('tanggal', 'desc')->get() as $simpanan)
+                                <tr>
+                                    <td>{{ $simpanan->tanggal->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($simpanan->bulan)->translatedFormat('F Y') }}</td>
+                                    <td>Rp {{ number_format($simpanan->jumlah, 0, ',', '.') }}</td>
+                                    <td>{{ $simpanan->keterangan }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">Belum ada data simpanan wajib</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 
-    <div class="mt-3 d-flex gap-2">
+
+
+    <div class="mt-3 d-flex gap-2 ms-8 mb-8">
         <a href="{{ route('superadmin.anggota.edit', $anggota) }}" class="btn btn-warning-600 d-flex align-items-center gap-1">
             <iconify-icon icon="mdi:pencil" class="icon"></iconify-icon>
             Edit Anggota
@@ -353,6 +406,86 @@
             <iconify-icon icon="mdi:arrow-left" class="icon"></iconify-icon>
             Kembali
         </a>
+    </div>
+</div>
+
+<!-- Modal Simpanan Pokok -->
+<div class="modal fade" id="modalSimpananPokok" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('superadmin.anggota.simpanan.pokok.store', $anggota->id) }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Simpanan Pokok</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="jumlah_pokok" class="form-label">Jumlah (Rupiah)</label>
+                        <input type="number" class="form-control" id="jumlah_pokok" name="jumlah" required min="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Simpanan Pokok -->
+<div class="modal fade" id="modalEditSimpananPokok" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('superadmin.anggota.simpanan.pokok.update', $anggota->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Simpanan Pokok</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="jumlah_pokok_edit" class="form-label">Jumlah (Rupiah)</label>
+                        <input type="number" class="form-control" id="jumlah_pokok_edit" name="jumlah" required min="1" value="{{ $anggota->total_simpanan_pokok }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Simpanan Wajib -->
+<div class="modal fade" id="modalSimpananWajib" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('superadmin.anggota.simpanan.wajib.store', $anggota->id) }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Simpanan Wajib</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="jumlah_wajib" class="form-label">Jumlah (Rupiah)</label>
+                        <input type="number" class="form-control" id="jumlah_wajib" name="jumlah" required min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="bulan_wajib" class="form-label">Untuk Bulan</label>
+                        <input type="date" class="form-control" id="bulan_wajib" name="bulan" required value="{{ date('Y-m-d') }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
@@ -384,5 +517,7 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
+
+    let table = new DataTable("#dataTable");
 </script>
 @endpush

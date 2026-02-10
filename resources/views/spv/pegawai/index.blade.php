@@ -39,7 +39,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>NIP</th>
+                            <th>NIK</th>
                             <th>Nama Lengkap</th>
                             <th>Jabatan</th>
                             <th>Unit Kerja</th>
@@ -51,7 +51,7 @@
                         @forelse($pegawai as $item)
                         <tr>
                             <td>{{ $loop->iteration + ($pegawai->currentPage() - 1) * $pegawai->perPage() }}</td>
-                            <td><span class="badge bg-primary-600">{{ $item->nip }}</span></td>
+                            <td><span class="badge bg-primary-600">{{ $item->nik }}</span></td>
                             <td>{{ $item->nama_lengkap }}</td>
                             <td>{{ $item->jabatan }}</td>
                             <td>{{ $item->unit_kerja }}</td>

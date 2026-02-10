@@ -23,3 +23,10 @@
         <span>Data Anggota</span>
     </a>
 </li>
+<li class="sidebar-menu-group-title">Pengaturan</li>
+<li>
+    <a href="{{ route('admin-mini-market.settings.invoice.index') }}" class="{{ request()->routeIs('admin-mini-market.settings.invoice.*') ? 'active-page' : '' }}">
+        <iconify-icon icon="mdi:file-document-edit-outline" class="menu-icon"></iconify-icon>
+        <span>Invoice</span>
+    </a>
+</li>

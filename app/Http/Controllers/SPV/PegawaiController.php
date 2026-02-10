@@ -4,7 +4,10 @@ namespace App\Http\Controllers\SPV;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class PegawaiController extends Controller
 {
@@ -22,7 +25,10 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nip' => 'required|string|unique:pegawai,nip',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+            'role' => ['required', Rule::in(['staff-keuangan'])],
+            'nik' => 'required|string|unique:pegawai,nik',
             'nama_lengkap' => 'required|string|max:255',
             'jabatan' => 'required|string|max:255',
             'unit_kerja' => 'required|string|max:255',
@@ -30,10 +36,28 @@ class PegawaiController extends Controller
             'alamat' => 'nullable|string|max:500',
         ]);
 
-        Pegawai::create($validated);
+        // Create User
+        $user = User::create([
+            'name' => $validated['nama_lengkap'], // Use nama_lengkap as name
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $user->assignRole($validated['role']);
+
+        // Create Pegawai
+        Pegawai::create([
+            'user_id' => $user->id,
+            'nik' => $validated['nik'],
+            'nama_lengkap' => $validated['nama_lengkap'],
+            'jabatan' => $validated['jabatan'],
+            'unit_kerja' => $validated['unit_kerja'],
+            'telepon' => $validated['telepon'],
+            'alamat' => $validated['alamat'],
+        ]);
 
         return redirect()->route('spv.pegawai.index')
-            ->with('success', 'Pegawai berhasil ditambahkan.');
+            ->with('success', 'Pegawai dan akun pengguna berhasil ditambahkan.');
     }
 
     public function show(Pegawai $pegawai)
@@ -49,7 +73,7 @@ class PegawaiController extends Controller
     public function update(Request $request, Pegawai $pegawai)
     {
         $validated = $request->validate([
-            'nip' => 'required|string|unique:pegawai,nip,' . $pegawai->id,
+            'nik' => 'required|string|unique:pegawai,nik,' . $pegawai->id,
             'nama_lengkap' => 'required|string|max:255',
             'jabatan' => 'required|string|max:255',
             'unit_kerja' => 'required|string|max:255',

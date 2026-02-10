@@ -39,8 +39,6 @@ class AnggotaController extends Controller
             'status_pegawai' => 'required|in:PNS,P3K,PPNPN',
             'status_keanggotaan' => 'required|in:Aktif,Tidak Aktif',
             'limit_pinjaman' => 'required|numeric|min:0',
-            'simpanan_pokok' => 'required|numeric|min:0',
-            'simpanan_wajib' => 'required|numeric|min:0',
         ]);
 
         DB::beginTransaction();
@@ -70,8 +68,8 @@ class AnggotaController extends Controller
                 'status_pegawai' => $validated['status_pegawai'],
                 'status_keanggotaan' => $validated['status_keanggotaan'],
                 'limit_pinjaman' => $validated['limit_pinjaman'],
-                'simpanan_pokok' => $validated['simpanan_pokok'],
-                'simpanan_wajib' => $validated['simpanan_wajib'],
+                'simpanan_pokok' => 0,
+                'simpanan_wajib' => 0,
                 'jumlah_belanja_minimarket' => 0,
             ]);
 
@@ -111,8 +109,6 @@ class AnggotaController extends Controller
             'status_pegawai' => 'required|in:PNS,P3K,PPNPN',
             'status_keanggotaan' => 'required|in:Aktif,Tidak Aktif',
             'limit_pinjaman' => 'required|numeric|min:0',
-            'simpanan_pokok' => 'required|numeric|min:0',
-            'simpanan_wajib' => 'required|numeric|min:0',
         ]);
 
         DB::beginTransaction();
@@ -126,8 +122,6 @@ class AnggotaController extends Controller
                 'status_pegawai' => $validated['status_pegawai'],
                 'status_keanggotaan' => $validated['status_keanggotaan'],
                 'limit_pinjaman' => $validated['limit_pinjaman'],
-                'simpanan_pokok' => $validated['simpanan_pokok'],
-                'simpanan_wajib' => $validated['simpanan_wajib'],
             ]);
 
             DB::commit();

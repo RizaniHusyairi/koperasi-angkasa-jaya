@@ -40,7 +40,7 @@
     <div class="card basic-data-table">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Daftar Anggota Koperasi</h5>
-            <a href="{{ route('superadmin.anggota.create') }}" class="btn btn-primary-600">
+            <a href="{{ route('superadmin.anggota.create') }}" class="btn btn-primary-600 d-flex">
                 <iconify-icon icon="mdi:plus" class="icon me-1"></iconify-icon>
                 Tambah Anggota
             </a>
@@ -66,7 +66,7 @@
                             <td><a href="{{ route('superadmin.anggota.show', $item) }}" class="text-primary-600 fw-medium">{{ $item->nomor_anggota }}</a></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ asset('assets/images/user-list/user-list1.png') }}" alt="{{ $item->user->name }}" class="flex-shrink-0 me-12 radius-8" style="width: 40px; height: 40px;">
+                                    <img src="{{ $item->user->avatar_url }}" alt="{{ $item->user->name }}" class="flex-shrink-0 me-12 radius-8 object-fit-cover" style="width: 40px; height: 40px;">
                                     <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $item->user->name }}</h6>
                                 </div>
                             </td>

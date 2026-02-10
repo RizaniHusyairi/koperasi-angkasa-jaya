@@ -71,4 +71,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Get the user's avatar URL.
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->image && file_exists(public_path('storage/' . $this->image))) {
+            return asset('storage/' . $this->image);
+        }
+        
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random';
+        // Or use a local default: return asset('assets/images/user-grid/user-img.png');
+    }
 }

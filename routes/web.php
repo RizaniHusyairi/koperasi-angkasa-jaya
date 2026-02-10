@@ -36,6 +36,10 @@ use App\Http\Controllers\AdminMiniMarket\ProfileController as AdminMiniMarketPro
 use App\Http\Controllers\Anggota\MiniMarketController as AnggotaMiniMarket;
 use App\Http\Controllers\ProfileController;
 
+// Staff Keuangan Controllers
+use App\Http\Controllers\StaffKeuangan\DashboardController as StaffKeuanganDashboard;
+use App\Http\Controllers\StaffKeuangan\InvoiceController as StaffKeuanganInvoice;
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -54,6 +58,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin-sp.dashboard');
     } elseif ($user->hasRole('admin-mini-market')) {
         return redirect()->route('admin-mini-market.dashboard');
+    } elseif ($user->hasRole('staff-keuangan')) {
+        return redirect()->route('staff-keuangan.dashboard');
     }
     
     return redirect()->route('login');
@@ -64,6 +70,9 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('superadmin')->name('sup
     Route::get('/dashboard', [SuperAdminDashboard::class, 'index'])->name('dashboard');
     Route::resource('users', SuperAdminUser::class);
     Route::resource('anggota', SuperAdminAnggota::class);
+    Route::post('/anggota/{anggota}/simpanan-pokok', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'storePokok'])->name('anggota.simpanan.pokok.store');
+    Route::put('/anggota/{anggota}/simpanan-pokok', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'updatePokok'])->name('anggota.simpanan.pokok.update');
+    Route::post('/anggota/{anggota}/simpanan-wajib', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'storeWajib'])->name('anggota.simpanan.wajib.store');
 });
 
 // Anggota Routes
@@ -105,6 +114,7 @@ Route::middleware(['auth', 'role:admin-simpan-pinjam'])->prefix('admin-sp')->nam
     Route::post('/pengajuan/{pengajuan}/reject', [AdminSPPengajuan::class, 'reject'])->name('pengajuan.reject');
     Route::get('/pinjaman', [AdminSPPinjaman::class, 'index'])->name('pinjaman.index');
     Route::get('/pinjaman/{pinjaman}', [AdminSPPinjaman::class, 'show'])->name('pinjaman.show');
+    Route::delete('/pinjaman/{pinjaman}', [AdminSPPinjaman::class, 'destroy'])->name('pinjaman.destroy');
     Route::get('/pengaturan', [AdminSPProfile::class, 'index'])->name('pengaturan.index');
     Route::put('/pengaturan/profile', [AdminSPProfile::class, 'updateProfile'])->name('pengaturan.profile');
     Route::put('/pengaturan/password', [AdminSPProfile::class, 'updatePassword'])->name('pengaturan.password');
@@ -116,14 +126,30 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
     Route::get('/dashboard', [AdminMiniMarketDashboard::class, 'index'])->name('dashboard');
     Route::resource('products', AdminMiniMarketProduct::class);
     Route::resource('orders', AdminMiniMarketOrder::class);
+    Route::get('orders/{order}/print', [AdminMiniMarketOrder::class, 'print'])->name('orders.print');
+    // Member list with order history
+    Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
+    Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');
+
     // Member list with order history
     Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
     Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');
 
     // Settings
+    Route::get('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'index'])->name('settings.invoice.index');
+    Route::put('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'update'])->name('settings.invoice.update');
+
+    // Profile Settings
     Route::get('/pengaturan', [AdminMiniMarketProfile::class, 'index'])->name('pengaturan.index');
     Route::put('/pengaturan/profile', [AdminMiniMarketProfile::class, 'updateProfile'])->name('pengaturan.profile');
     Route::put('/pengaturan/password', [AdminMiniMarketProfile::class, 'updatePassword'])->name('pengaturan.password');
+    Route::put('/pengaturan/password', [AdminMiniMarketProfile::class, 'updatePassword'])->name('pengaturan.password');
+});
+
+// Staff Keuangan Routes
+Route::middleware(['auth', 'role:staff-keuangan'])->prefix('staff-keuangan')->name('staff-keuangan.')->group(function () {
+    Route::get('/dashboard', [StaffKeuanganDashboard::class, 'index'])->name('dashboard');
+    Route::get('/invoice', [StaffKeuanganInvoice::class, 'index'])->name('invoice.index');
 });
 
 Route::middleware('auth')->group(function () {

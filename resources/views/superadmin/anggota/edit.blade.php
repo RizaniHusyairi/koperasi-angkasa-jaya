@@ -100,21 +100,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="simpanan_pokok" class="form-label">Simpanan Pokok <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control @error('simpanan_pokok') is-invalid @enderror" id="simpanan_pokok" name="simpanan_pokok" value="{{ old('simpanan_pokok', $anggota->simpanan_pokok) }}" min="0" required>
-                        @error('simpanan_pokok')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="simpanan_wajib" class="form-label">Simpanan Wajib <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control @error('simpanan_wajib') is-invalid @enderror" id="simpanan_wajib" name="simpanan_wajib" value="{{ old('simpanan_wajib', $anggota->simpanan_wajib) }}" min="0" required>
-                        @error('simpanan_wajib')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="d-flex gap-2 mt-4">
