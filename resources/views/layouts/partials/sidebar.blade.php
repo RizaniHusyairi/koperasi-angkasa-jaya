@@ -21,6 +21,8 @@
                 @include('layouts.sidebar.admin-simpan-pinjam')
             @elseif(auth()->user()->hasRole('admin-mini-market'))
                 @include('layouts.sidebar.admin-mini-market')
+            @elseif(auth()->user()->hasRole('staff-keuangan'))
+                @include('layouts.sidebar.staff-keuangan')
             @endif
         </ul>
     </div>

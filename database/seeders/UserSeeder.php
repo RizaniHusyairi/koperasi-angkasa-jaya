@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Anggota;
+use App\Models\Pegawai;
 use App\Models\Tabungan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +26,10 @@ class UserSeeder extends Seeder
             ]
         );
         $superAdmin->assignRole('super-admin');
+
+        // Create Staff Keuangan Role if not exists
+        // This is usually done in RoleSeeder, but for simplicity/completeness ensuring it here or in migration
+        // $role = Role::firstOrCreate(['name' => 'staff-keuangan']); 
 
         // Create SPV
         $spv = User::firstOrCreate(
@@ -55,6 +60,50 @@ class UserSeeder extends Seeder
             ]
         );
         $adminMiniMarket->assignRole('admin-mini-market');
+
+        // Create Pegawai Staff Keuangan 1
+        $staff1 = User::firstOrCreate(
+            ['email' => 'staff1@koperasi.aptpairport.id'],
+            [
+                'name' => 'Staff Keuangan 1',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $staff1->assignRole('staff-keuangan');
+        
+        Pegawai::firstOrCreate(
+            ['user_id' => $staff1->id],
+            [
+                'nik' => 'PEG-001',
+                'nama_lengkap' => 'Staff Keuangan 1',
+                'jabatan' => 'Staff Keuangan',
+                'unit_kerja' => 'Keuangan',
+                'telepon' => '081234567890',
+                'alamat' => 'Jl. Koperasi No. 1',
+            ]
+        );
+
+        // Create Pegawai Staff Keuangan 2
+        $staff2 = User::firstOrCreate(
+            ['email' => 'staff2@koperasi.aptpairport.id'],
+            [
+                'name' => 'Staff Keuangan 2',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $staff2->assignRole('staff-keuangan');
+
+        Pegawai::firstOrCreate(
+            ['user_id' => $staff2->id],
+            [
+                'nik' => 'PEG-002',
+                'nama_lengkap' => 'Staff Keuangan 2',
+                'jabatan' => 'Staff Keuangan',
+                'unit_kerja' => 'Keuangan',
+                'telepon' => '081234567891',
+                'alamat' => 'Jl. Koperasi No. 2',
+            ]
+        );
 
         // Create Anggota Demo
         

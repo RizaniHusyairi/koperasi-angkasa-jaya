@@ -21,11 +21,7 @@
     <div class="card basic-data-table">
         <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <h6 class="card-title mb-0">Daftar Pinjaman</h6>
-                <form action="{{ route('admin-sp.pinjaman.index') }}" method="GET" class="d-flex align-items-center gap-2">
-                    <input type="hidden" name="status" value="{{ $status }}">
-                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari Anggota..." value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-sm btn-primary-600"><iconify-icon icon="mdi:magnify"></iconify-icon></button>
-                </form>
+
             <div class="d-flex gap-2">
                 <a href="{{ route('admin-sp.pinjaman.index') }}?status=all" class="btn btn-sm {{ $status == 'all' ? 'btn-primary-600' : 'btn-outline-primary-600' }}">Semua</a>
                 <a href="{{ route('admin-sp.pinjaman.index') }}?status=Aktif" class="btn btn-sm {{ $status == 'Aktif' ? 'btn-success-600' : 'btn-outline-success-600' }}">Aktif</a>
@@ -34,7 +30,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table bordered-table mb-0" id="dataTable">
+                <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
                     <thead>
                         <tr>
                             <th scope="col">ID Pinjaman</th>
@@ -73,18 +69,25 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('admin-sp.pinjaman.show', $item) }}" class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center">
-                                    <iconify-icon icon="mdi:eye"></iconify-icon>
-                                </a>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('admin-sp.pinjaman.show', $item) }}" class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center" data-bs-toggle="tooltip" title="Lihat Detaill">
+                                        <iconify-icon icon="mdi:eye"></iconify-icon>
+                                    </a>
+                                    <form action="{{ route('admin-sp.pinjaman.destroy', $item->id) }}" class="w-32-px h-32-px bg-danger-light text-danger-600 rounded-circle d-inline-flex align-items-center justify-content-center" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pinjaman anggota ini? Data angsuran terkait juga akan dihapus permanen.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" data-bs-toggle="tooltip" title="Hapus Pinjaman">
+                                            <iconify-icon icon="mdi:trash-can-outline"></iconify-icon>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">
-                {{ $pinjaman->appends(['status' => $status, 'search' => request('search')])->links() }}
-            </div>
+            
         </div>
     </div>
 </div>
@@ -92,16 +95,6 @@
 
 @push('scripts')
 <script>
-    let table = new DataTable('#dataTable', {
-        responsive: true,
-        searching: false, // Since we rely on server-side filters mostly and simple list
-        paging: false, // Using Laravel pagination
-        info: false,
-        lengthChange: false,
-        order: [], // Disable initial sort to keep server sort
-        language: {
-            emptyTable: "Tidak ada data pinjaman"
-        }
-    });
+    let table = new DataTable("#dataTable");
 </script>
 @endpush

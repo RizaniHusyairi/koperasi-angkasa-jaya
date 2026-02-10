@@ -33,9 +33,9 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nip" class="form-label">NIP <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('nip') is-invalid @enderror" id="nip" name="nip" value="{{ old('nip', $pegawai->nip) }}" required>
-                        @error('nip')
+                        <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik', $pegawai->nik) }}" required>
+                        @error('nik')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

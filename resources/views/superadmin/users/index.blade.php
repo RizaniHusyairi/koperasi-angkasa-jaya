@@ -35,7 +35,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h6 class="card-title mb-0">Daftar Pengguna</h6>
-            <a href="{{ route('superadmin.users.create') }}" class="btn btn-primary-600">
+            <a href="{{ route('superadmin.users.create') }}" class="btn btn-primary-600 d-flex">
                 <iconify-icon icon="mdi:plus" class="icon me-1"></iconify-icon>
                 Tambah Pengguna
             </a>

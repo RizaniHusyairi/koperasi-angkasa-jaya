@@ -32,9 +32,9 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nip" class="form-label">NIP <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('nip') is-invalid @enderror" id="nip" name="nip" value="{{ old('nip') }}" required>
-                        @error('nip')
+                        <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik') }}" required>
+                        @error('nik')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -43,6 +43,35 @@
                         <label for="nama_lengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required>
                         @error('nama_lengkap')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="email" class="form-label">Email (untuk Login) <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
+                        @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
+                        @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
+                            <option value="">Pilih Role</option>
+                            <option value="staff-keuangan" {{ old('role') == 'staff-keuangan' ? 'selected' : '' }}>Staff Keuangan</option>
+                        </select>
+                        @error('role')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

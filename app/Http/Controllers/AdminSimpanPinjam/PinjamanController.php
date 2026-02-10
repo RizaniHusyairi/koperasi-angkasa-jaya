@@ -28,7 +28,7 @@ class PinjamanController extends Controller
             });
         }
         
-        $pinjaman = $query->orderBy('tanggal_pinjaman', 'desc')->paginate(10);
+        $pinjaman = $query->orderBy('tanggal_pinjaman', 'desc')->get();
 
         return view('admin-simpan-pinjam.pinjaman.index', compact('pinjaman', 'status'));
     }
@@ -37,5 +37,24 @@ class PinjamanController extends Controller
     {
         $pinjaman->load('anggota.user');
         return view('admin-simpan-pinjam.pinjaman.show', compact('pinjaman'));
+    }
+
+    public function destroy(Pinjaman $pinjaman)
+    {
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            // Delete associated installments first (though DB cascade might handle it, manual is safer here)
+            $pinjaman->angsuran()->delete();
+            
+            // Delete the loan
+            $pinjaman->delete();
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            return redirect()->back()->with('success', 'Data pinjaman dan riwayat angsuran berhasil dihapus.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
+        }
     }
 }

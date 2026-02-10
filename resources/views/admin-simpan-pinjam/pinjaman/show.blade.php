@@ -28,7 +28,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center flex-column text-center">
-                        <img src="{{ asset('assets/images/users/user1.png') }}" alt="" class="w-120-px h-120-px rounded-circle object-fit-cover mb-24 text-center">
+                        <img src="{{ $pinjaman->anggota->user->avatar_url }}" alt="" class="w-120-px h-120-px rounded-circle object-fit-cover mb-24 text-center">
                         <h6 class="mb-0 fw-semibold">{{ $pinjaman->anggota->user->name }}</h6>
                         <span class="text-sm text-secondary-light">{{ $pinjaman->anggota->nomor_anggota }}</span>
                         <div class="mt-24 w-100">
