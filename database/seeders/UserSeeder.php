@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Super Admin
+        
         // Create Super Admin
         $superAdmin = User::firstOrCreate(
             ['email' => 'superadmin@koperasi.aptpairport.id'],
