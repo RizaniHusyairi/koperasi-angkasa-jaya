@@ -3,12 +3,137 @@
 namespace App\Http\Controllers\StaffKeuangan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        return view('staff-keuangan.invoice.index');
+        $invoices = Invoice::latest()->paginate(10);
+        return view('staff-keuangan.invoice.index', compact('invoices'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('staff-keuangan.invoice.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'invoice_number' => 'required|unique:invoices,invoice_number',
+            'type' => 'required|string',
+            'partner_name' => 'required|string',
+            'date' => 'required|date',
+            'items' => 'required|array|min:1',
+            'items.*.description' => 'required|string',
+            'items.*.amount' => 'required|numeric|min:0',
+        ]);
+
+        DB::transaction(function () use ($request) {
+            $totalAmount = 0;
+            foreach ($request->items as $item) {
+                $totalAmount += $item['amount'];
+            }
+
+            $invoice = Invoice::create([
+                'invoice_number' => $request->invoice_number,
+                'type' => $request->type,
+                'partner_name' => $request->partner_name,
+                'date' => $request->date,
+                'total_amount' => $totalAmount,
+            ]);
+
+            foreach ($request->items as $item) {
+                $invoice->items()->create([
+                    'description' => $item['description'],
+                    'amount' => $item['amount'],
+                ]);
+            }
+        });
+
+        return redirect()->route('staff-keuangan.invoice.index')->with('success', 'Invoice berhasil dibuat.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Invoice $invoice)
+    {
+        $invoice->load('items');
+        return view('staff-keuangan.invoice.show', compact('invoice'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Invoice $invoice)
+    {
+        $invoice->load('items');
+        return view('staff-keuangan.invoice.edit', compact('invoice'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Invoice $invoice)
+    {
+        $request->validate([
+            'invoice_number' => 'required|unique:invoices,invoice_number,' . $invoice->id,
+            'type' => 'required|string',
+            'partner_name' => 'required|string',
+            'date' => 'required|date',
+            'items' => 'required|array|min:1',
+            'items.*.description' => 'required|string',
+            'items.*.amount' => 'required|numeric|min:0',
+        ]);
+
+        DB::transaction(function () use ($request, $invoice) {
+            $totalAmount = 0;
+            foreach ($request->items as $item) {
+                $totalAmount += $item['amount'];
+            }
+
+            $invoice->update([
+                'invoice_number' => $request->invoice_number,
+                'type' => $request->type,
+                'partner_name' => $request->partner_name,
+                'date' => $request->date,
+                'total_amount' => $totalAmount,
+            ]);
+
+            // Delete old items and create new ones
+            $invoice->items()->delete();
+
+            foreach ($request->items as $item) {
+                $invoice->items()->create([
+                    'description' => $item['description'],
+                    'amount' => $item['amount'],
+                ]);
+            }
+        });
+
+        return redirect()->route('staff-keuangan.invoice.index')->with('success', 'Invoice berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Invoice $invoice)
+    {
+        $invoice->delete();
+        return redirect()->route('staff-keuangan.invoice.index')->with('success', 'Invoice berhasil dihapus.');
     }
 }

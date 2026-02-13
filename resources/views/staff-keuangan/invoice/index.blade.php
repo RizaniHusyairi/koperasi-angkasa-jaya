@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Invoice - Coming Soon')
-
 @section('content')
 <div class="dashboard-main-body">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
@@ -18,18 +16,71 @@
         </ul>
     </div>
 
-    <div class="card h-100">
-        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center py-5">
-            <div class="mb-4">
-                <iconify-icon icon="fluent:rocket-20-regular" class="text-primary-600" width="120" height="120"></iconify-icon>
-            </div>
-            <h2 class="fw-bold mb-3">Coming Soon!</h2>
-            <p class="text-secondary-light mb-4" style="max-width: 500px;">
-                Fitur Manajemen Invoice sedang dalam pengembangan. Kami sedang bekerja keras untuk menghadirkan pengalaman pengelolaan invoice terbaik untuk Anda.
-            </p>
-            <a href="{{ route('staff-keuangan.dashboard') }}" class="btn btn-primary-600 px-4 py-2">
-                Kembali ke Dashboard
+    <div class="card basic-data-table">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+            <h5 class="card-title mb-0">List Invoice</h5>
+            <a href="{{ route('staff-keuangan.invoice.create') }}" class="btn btn-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
+                <iconify-icon icon="mingcute:add-line" class="text-xl"></iconify-icon>
+                Tambah Invoice
             </a>
+        </div>
+        <div class="card-body p-24">
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mb-24" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+
+            <div class="table-responsive">
+                <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
+                    <thead>
+                        <tr>
+                            <th scope="col">No. Invoice</th>
+                            <th scope="col">Tipe</th>
+                            <th scope="col">Mitra</th>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($invoices as $invoice)
+                        <tr>
+                            <td>{{ $invoice->invoice_number }}</td>
+                            <td>{{ $invoice->type }}</td>
+                            <td>{{ $invoice->partner_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}</td>
+                            <td>Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('staff-keuangan.invoice.show', $invoice->id) }}" class="w-32-px h-32-px bg-info-focus text-info-main rounded-circle d-inline-flex align-items-center justify-content-center" title="Detail">
+                                        <iconify-icon icon="mingcute:eye-2-line"></iconify-icon>
+                                    </a>
+                                    <a href="{{ route('staff-keuangan.invoice.edit', $invoice->id) }}" class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center" title="Edit">
+                                        <iconify-icon icon="lucide:edit"></iconify-icon>
+                                    </a>
+                                    <form action="{{ route('staff-keuangan.invoice.destroy', $invoice->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus invoice ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center border-0" title="Hapus">
+                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center">Belum ada data invoice.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                {{ $invoices->links() }}
+            </div>
         </div>
     </div>
 </div>

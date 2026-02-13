@@ -149,7 +149,7 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
 // Staff Keuangan Routes
 Route::middleware(['auth', 'role:staff-keuangan'])->prefix('staff-keuangan')->name('staff-keuangan.')->group(function () {
     Route::get('/dashboard', [StaffKeuanganDashboard::class, 'index'])->name('dashboard');
-    Route::get('/invoice', [StaffKeuanganInvoice::class, 'index'])->name('invoice.index');
+    Route::resource('invoice', StaffKeuanganInvoice::class);
 });
 
 Route::middleware('auth')->group(function () {
