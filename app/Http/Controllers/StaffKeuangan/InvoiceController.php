@@ -36,9 +36,13 @@ class InvoiceController extends Controller
             'invoice_number' => 'required|unique:invoices,invoice_number',
             'type' => 'required|string',
             'partner_name' => 'required|string',
+            'activity' => 'required|string',
             'date' => 'required|date',
             'items' => 'required|array|min:1',
+            // Validasi tipe item (header/subheader/item)
+            'items.*.type' => 'required|in:header,subheader,item', 
             'items.*.description' => 'required|string',
+            // Header biasanya 0, jadi numeric min 0 sudah benar
             'items.*.amount' => 'required|numeric|min:0',
         ]);
 
@@ -52,12 +56,14 @@ class InvoiceController extends Controller
                 'invoice_number' => $request->invoice_number,
                 'type' => $request->type,
                 'partner_name' => $request->partner_name,
+                'activity' => $request->activity,
                 'date' => $request->date,
                 'total_amount' => $totalAmount,
             ]);
 
             foreach ($request->items as $item) {
                 $invoice->items()->create([
+                    'item_type' => $item['type'],
                     'description' => $item['description'],
                     'amount' => $item['amount'],
                 ]);
@@ -94,8 +100,10 @@ class InvoiceController extends Controller
             'invoice_number' => 'required|unique:invoices,invoice_number,' . $invoice->id,
             'type' => 'required|string',
             'partner_name' => 'required|string',
+            'activity' => 'required|string',
             'date' => 'required|date',
             'items' => 'required|array|min:1',
+            'items.*.type' => 'required|in:header,subheader,item',
             'items.*.description' => 'required|string',
             'items.*.amount' => 'required|numeric|min:0',
         ]);
@@ -110,6 +118,7 @@ class InvoiceController extends Controller
                 'invoice_number' => $request->invoice_number,
                 'type' => $request->type,
                 'partner_name' => $request->partner_name,
+                'activity' => $request->activity,
                 'date' => $request->date,
                 'total_amount' => $totalAmount,
             ]);
@@ -119,6 +128,7 @@ class InvoiceController extends Controller
 
             foreach ($request->items as $item) {
                 $invoice->items()->create([
+                    'item_type' => $item['type'],
                     'description' => $item['description'],
                     'amount' => $item['amount'],
                 ]);

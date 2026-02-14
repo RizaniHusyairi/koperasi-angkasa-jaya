@@ -53,6 +53,13 @@
                             <div class="text-danger text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-6">
+                        <label for="activity" class="form-label fw-semibold text-primary-light text-sm mb-8">Kegiatan</label>
+                        <input type="text" class="form-control radius-8" id="activity" name="activity" value="{{ old('activity') }}" required>
+                        @error('activity')
+                            <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mt-24">
@@ -68,6 +75,7 @@
                         <table class="table bordered-table mb-0">
                             <thead>
                                 <tr>
+                                    <th scope="col" width="20%">Tipe Baris</th>
                                     <th scope="col" width="60%">Uraian</th>
                                     <th scope="col" width="30%">Jumlah (Rp)</th>
                                     <th scope="col" width="10%">Aksi</th>
@@ -145,10 +153,17 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>
-                    <input type="text" class="form-control radius-8" name="items[${itemIndex}][description]" value="${description}" required placeholder="Masukkan uraian">
+                    <select class="form-select radius-8 item-type" name="items[${itemIndex}][type]" onchange="adjustRowStyle(this)">
+                        <option value="header" ${type === 'header' ? 'selected' : ''}>Judul Utama (Bold)</option>
+                        <option value="subheader" ${type === 'subheader' ? 'selected' : ''}>Sub-Judul (Indent 1)</option>
+                        <option value="item" ${type === 'item' ? 'selected' : ''}>Item List (Indent 2)</option>
+                    </select>
                 </td>
                 <td>
-                    <input type="text" class="form-control radius-8 item-amount" name="items[${itemIndex}][amount]" value="${amount}" required placeholder="Rp 0">
+                    <input type="text" class="form-control radius-8 item-desc" name="items[${itemIndex}][description]" value="${description}" required placeholder="Contoh: 1. Tagihan Jasa...">
+                </td>
+                <td>
+                    <input type="text" class="form-control radius-8 item-amount" name="items[${itemIndex}][amount]" value="${amount}" placeholder="Rp 0">
                 </td>
                 <td>
                     <button type="button" class="btn btn-danger-100 text-danger-600 radius-8 p-10 d-flex align-items-center justify-content-center delete-item">
@@ -159,6 +174,8 @@
             itemsContainer.appendChild(row);
 
             const amountInput = row.querySelector('.item-amount');
+            const typeSelect = row.querySelector('.item-type');
+
             if (amount) {
                 amountInput.value = formatRupiah(amount.toString());
             }
@@ -173,8 +190,29 @@
                 calculateTotal();
             });
 
+            // Panggil fungsi style untuk set awal (opsional, visual saja di form input)
+            adjustRowStyle(typeSelect);
+
             itemIndex++;
             calculateTotal();
+        }
+        // Fungsi Tambahan: Agar saat input, user bisa melihat bedanya secara visual (Opsional)
+        function adjustRowStyle(selectElement) {
+            const row = selectElement.closest('tr');
+            const descInput = row.querySelector('.item-desc');
+            const amountInput = row.querySelector('.item-amount');
+
+            if (selectElement.value === 'header') {
+                descInput.style.fontWeight = 'bold';
+                descInput.style.paddingLeft = '10px';
+                // Biasanya header tidak punya harga, tapi tergantung kasus
+            } else if (selectElement.value === 'subheader') {
+                descInput.style.fontWeight = '500';
+                descInput.style.paddingLeft = '30px'; // Indentasi visual
+            } else {
+                descInput.style.fontWeight = 'normal';
+                descInput.style.paddingLeft = '50px'; // Indentasi lebih dalam
+            }
         }
 
         addItemBtn.addEventListener('click', function() {
