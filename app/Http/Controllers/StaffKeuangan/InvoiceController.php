@@ -159,6 +159,7 @@ class InvoiceController extends Controller
         $pdf->setPaper('a4', 'portrait');
 
         // Stream (buka di browser) dengan nama file custom
-        return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf');
+        $filename = 'Invoice-' . str_replace(['/', '\\'], '-', $invoice->invoice_number) . '.pdf';
+        return $pdf->stream($filename);
     }
 }
