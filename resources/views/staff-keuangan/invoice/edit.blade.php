@@ -26,6 +26,7 @@
                 @csrf
                 @method('PUT')
                 <div class="row gy-4">
+                    {{-- Input Data Utama Invoice --}}
                     <div class="col-md-6">
                         <label for="invoice_number" class="form-label fw-semibold text-primary-light text-sm mb-8">No. Invoice</label>
                         <input type="text" class="form-control radius-8" id="invoice_number" name="invoice_number" value="{{ old('invoice_number', $invoice->invoice_number) }}" required>
@@ -54,6 +55,13 @@
                             <div class="text-danger text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-6">
+                        <label for="activity" class="form-label fw-semibold text-primary-light text-sm mb-8">Kegiatan</label>
+                        <input type="text" class="form-control radius-8" id="activity" name="activity" value="{{ old('activity', $invoice->activity) }}" required>
+                        @error('activity')
+                            <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mt-24">
@@ -69,17 +77,19 @@
                         <table class="table bordered-table mb-0">
                             <thead>
                                 <tr>
-                                    <th scope="col" width="60%">Uraian</th>
-                                    <th scope="col" width="30%">Jumlah (Rp)</th>
+                                    {{-- Kolom Tipe Baris Ditambahkan --}}
+                                    <th scope="col" width="20%">Tipe Baris</th>
+                                    <th scope="col" width="50%">Uraian</th>
+                                    <th scope="col" width="20%">Jumlah (Rp)</th>
                                     <th scope="col" width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="itemsContainer">
-                                {{-- Items will be added here --}}
+                                {{-- Items will be added here via JS --}}
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td class="text-end fw-semibold">Total</td>
+                                    <td colspan="2" class="text-end fw-semibold">Total</td>
                                     <td class="fw-semibold" id="totalAmount">Rp 0</td>
                                     <td></td>
                                 </tr>
@@ -142,14 +152,23 @@
             totalAmountEl.textContent = formatRupiah(total.toString());
         }
 
-        function addItem(description = '', amount = '') {
+        // Fungsi addItem diperbarui menerima parameter 'type'
+        function addItem(description = '', amount = '', type = 'item') {
             const row = document.createElement('tr');
+            
             row.innerHTML = `
                 <td>
-                    <input type="text" class="form-control radius-8" name="items[${itemIndex}][description]" value="${description}" required placeholder="Masukkan uraian">
+                    <select class="form-select radius-8 item-type" name="items[${itemIndex}][type]" onchange="adjustRowStyle(this)">
+                        <option value="header" ${type === 'header' ? 'selected' : ''}>Judul Utama (Bold)</option>
+                        <option value="subheader" ${type === 'subheader' ? 'selected' : ''}>Sub-Judul (Indent 1)</option>
+                        <option value="item" ${type === 'item' ? 'selected' : ''}>Item List (Indent 2)</option>
+                    </select>
                 </td>
                 <td>
-                    <input type="text" class="form-control radius-8 item-amount" name="items[${itemIndex}][amount]" value="${amount}" required placeholder="Rp 0">
+                    <input type="text" class="form-control radius-8 item-desc" name="items[${itemIndex}][description]" value="${description}" required placeholder="Masukkan uraian">
+                </td>
+                <td>
+                    <input type="text" class="form-control radius-8 item-amount" name="items[${itemIndex}][amount]" value="${amount}" placeholder="Rp 0">
                 </td>
                 <td>
                     <button type="button" class="btn btn-danger-100 text-danger-600 radius-8 p-10 d-flex align-items-center justify-content-center delete-item">
@@ -160,6 +179,8 @@
             itemsContainer.appendChild(row);
 
             const amountInput = row.querySelector('.item-amount');
+            const typeSelect = row.querySelector('.item-type');
+
             if (amount) {
                 amountInput.value = formatRupiah(amount.toString());
             }
@@ -174,24 +195,61 @@
                 calculateTotal();
             });
 
+            // Terapkan style awal sesuai tipe
+            adjustRowStyle(typeSelect);
+
             itemIndex++;
             calculateTotal();
         }
 
+        // Fungsi global agar bisa dipanggil dari 'onchange' di HTML string
+        window.adjustRowStyle = function(selectElement) {
+            const row = selectElement.closest('tr');
+            const descInput = row.querySelector('.item-desc');
+            
+            // Reset style dasar
+            descInput.style.fontWeight = 'normal';
+            descInput.style.paddingLeft = '12px'; // Default Bootstrap padding
+
+            if (selectElement.value === 'header') {
+                descInput.style.fontWeight = 'bold';
+                // Header biasanya tidak perlu indent
+            } else if (selectElement.value === 'subheader') {
+                descInput.style.fontWeight = '500';
+                descInput.style.paddingLeft = '30px'; // Indentasi Level 1
+            } else {
+                // Item biasa
+                descInput.style.paddingLeft = '50px'; // Indentasi Level 2
+            }
+        };
+
         addItemBtn.addEventListener('click', function() {
-            addItem();
+            addItem(); // Default tambah item kosong
         });
 
-        // Add initial items
+        // --- LOGIC LOADING DATA (PENTING) ---
+        
+        // 1. Cek jika ada input 'old' (misal validasi gagal)
         @if(old('items'))
             @foreach(old('items') as $key => $item)
-                addItem('{{ addslashes($item['description']) }}', '{{ $item['amount'] }}');
+                addItem(
+                    '{{ addslashes($item['description']) }}', 
+                    '{{ $item['amount'] }}',
+                    '{{ $item['type'] }}' // Ambil tipe dari old input
+                );
             @endforeach
+
+        // 2. Jika tidak ada old input, ambil dari Database
         @elseif($invoice->items->count() > 0)
             @foreach($invoice->items as $item)
-                addItem('{{ addslashes($item->description) }}', '{{ $item->amount }}');
+                addItem(
+                    '{{ addslashes($item->description) }}', 
+                    '{{ $item->amount }}',
+                    '{{ $item->item_type }}' // Ambil tipe dari kolom database
+                );
             @endforeach
         @else
+            // 3. Jika data kosong sama sekali (jarang terjadi di edit)
             addItem();
         @endif
 

@@ -13,6 +13,7 @@ class Invoice extends Model
         'invoice_number',
         'type',
         'partner_name',
+        'activity',
         'total_amount',
         'date',
     ];
