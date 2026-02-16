@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -135,5 +136,19 @@ class InvoiceController extends Controller
     {
         $invoice->delete();
         return redirect()->route('staff-keuangan.invoice.index')->with('success', 'Invoice berhasil dihapus.');
+    }
+
+    public function streamPdf($id)
+    {
+        $invoice = Invoice::with('items')->findOrFail($id);
+        
+        // Load view khusus PDF
+        $pdf = Pdf::loadView('staff-keuangan.invoice.pdf', compact('invoice'));
+        
+        // Set ukuran kertas A4 Portrait
+        $pdf->setPaper('a4', 'portrait');
+
+        // Stream (buka di browser) dengan nama file custom
+        return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf');
     }
 }

@@ -28,6 +28,10 @@
                     <p class="text-secondary-light mb-0">Tanggal: {{ \Carbon\Carbon::parse($invoice->date)->format('d F Y') }}</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
+                    <a href="{{ route('staff-keuangan.invoice.pdf', $invoice->id) }}" target="_blank" class="btn btn-primary-100 text-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
+                        <iconify-icon icon="mingcute:print-line" class="text-xl"></iconify-icon>
+                        Cetak PDF
+                    </a>
                     <a href="{{ route('staff-keuangan.invoice.edit', $invoice->id) }}" class="btn btn-warning-main radius-8 px-20 py-11 d-flex align-items-center gap-2">
                         <iconify-icon icon="lucide:edit" class="text-xl"></iconify-icon>
                         Edit

@@ -40,6 +40,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffKeuangan\DashboardController as StaffKeuanganDashboard;
 use App\Http\Controllers\StaffKeuangan\InvoiceController as StaffKeuanganInvoice;
 
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -150,6 +151,9 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
 Route::middleware(['auth', 'role:staff-keuangan'])->prefix('staff-keuangan')->name('staff-keuangan.')->group(function () {
     Route::get('/dashboard', [StaffKeuanganDashboard::class, 'index'])->name('dashboard');
     Route::resource('invoice', StaffKeuanganInvoice::class);
+
+    Route::get('/invoice/{invoice}/pdf', [StaffKeuanganInvoice::class, 'streamPdf'])
+    ->name('invoice.pdf');
 });
 
 Route::middleware('auth')->group(function () {
