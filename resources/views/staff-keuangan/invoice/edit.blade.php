@@ -244,7 +244,7 @@
             @foreach($invoice->items as $item)
                 addItem(
                     '{{ addslashes($item->description) }}', 
-                    '{{ $item->amount }}',
+                    '{{ (int) $item->amount }}',
                     '{{ $item->item_type }}' // Ambil tipe dari kolom database
                 );
             @endforeach

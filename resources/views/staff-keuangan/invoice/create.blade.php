@@ -149,7 +149,7 @@
             totalAmountEl.textContent = formatRupiah(total.toString());
         }
 
-        function addItem(description = '', amount = '') {
+        function addItem(description = '', amount = '', type = 'item') {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>
@@ -222,7 +222,7 @@
         // Add initial item if none (or handle old input)
         @if(old('items'))
             @foreach(old('items') as $key => $item)
-                addItem('{{ addslashes($item['description']) }}', '{{ $item['amount'] }}');
+                addItem('{{ addslashes($item['description']) }}', '{{ $item['amount'] }}', '{{ $item['type'] }}');
             @endforeach
         @else
             addItem();

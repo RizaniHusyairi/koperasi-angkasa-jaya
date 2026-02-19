@@ -7,7 +7,7 @@
     <title>Login - {{ config('app.name') }}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo_koperasi.png') }}" sizes="16x16">
     <!-- Remix Icon -->
     <link rel="stylesheet" href="{{ asset('assets/css/remixicon.css') }}">
     <!-- Bootstrap CSS -->

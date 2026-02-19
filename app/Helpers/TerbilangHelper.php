@@ -3,7 +3,7 @@
 if (!function_exists('terbilang')) {
     function terbilang($nilai) {
         $nilai = abs($nilai);
-        $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
+        $huruf = array("", " Satu", " Dua", " Tiga", " Empat", " Lima", " Enam", " Tujuh", " Delapan", " Sembilan", " Sepuluh", " Sebelas");
         $temp = "";
         if ($nilai < 12) {
             $temp = " ". $huruf[$nilai];

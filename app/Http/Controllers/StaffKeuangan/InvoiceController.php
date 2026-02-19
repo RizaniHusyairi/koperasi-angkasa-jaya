@@ -43,14 +43,14 @@ class InvoiceController extends Controller
             // Validasi tipe item (header/subheader/item)
             'items.*.type' => 'required|in:header,subheader,item', 
             'items.*.description' => 'required|string',
-            // Header biasanya 0, jadi numeric min 0 sudah benar
-            'items.*.amount' => 'required|numeric|min:0',
+            // Header/Subheader bisa null/0
+            'items.*.amount' => 'nullable|numeric',
         ]);
 
         DB::transaction(function () use ($request) {
             $totalAmount = 0;
             foreach ($request->items as $item) {
-                $totalAmount += $item['amount'];
+                $totalAmount += (float) ($item['amount'] ?? 0);
             }
 
             $invoice = Invoice::create([
@@ -66,7 +66,7 @@ class InvoiceController extends Controller
                 $invoice->items()->create([
                     'item_type' => $item['type'],
                     'description' => $item['description'],
-                    'amount' => $item['amount'],
+                    'amount' => $item['amount'] ?? 0,
                 ]);
             }
         });
