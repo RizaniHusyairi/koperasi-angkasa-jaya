@@ -113,8 +113,20 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $product) {
-            Product::create($product);
+        foreach ($products as $productData) {
+            $product = Product::create($productData);
+
+            if ($product->stock > 0) {
+                \App\Models\StockTransaction::create([
+                    'product_id' => $product->id,
+                    'type' => 'in',
+                    'quantity' => $product->stock,
+                    'previous_stock' => 0,
+                    'new_stock' => $product->stock,
+                    'notes' => 'Stok awal dari sistem (Seeder)',
+                    'user_id' => null, // Sistem
+                ]);
+            }
         }
     }
 }

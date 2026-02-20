@@ -107,14 +107,14 @@
                             <td colspan="2" class="px-4 py-3 fst-italic text-secondary-light">
                                 <span class="fw-semibold text-primary-light">Terbilang: </span> 
                                 {{-- Fungsi terbilang bisa ditambahkan di helper nanti, sementara hardcode/placeholder --}}
-                                # 
+                                
                                 @php
                                     // Contoh logic sederhana terbilang (sebaiknya dipindah ke Helper)
                                     $angka = $invoice->total_amount;
                                     // ... logic terbilang ...
                                     echo "Harap cek nominal manual"; 
                                 @endphp 
-                                #
+                                
                             </td>
                         </tr>
                     </tfoot>

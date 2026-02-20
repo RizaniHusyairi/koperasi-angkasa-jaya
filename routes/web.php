@@ -136,6 +136,15 @@ Route::middleware(['auth', 'role:admin-mini-market'])->prefix('admin-mini-market
     Route::get('/anggota', [AdminMiniMarketOrder::class, 'anggota'])->name('anggota.index');
     Route::get('/anggota/{anggota}', [AdminMiniMarketOrder::class, 'anggotaShow'])->name('anggota.show');
 
+    // Stock Management Routes
+    Route::get('/stocks', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'index'])->name('stocks.index');
+    Route::get('/stocks/in', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'createIn'])->name('stocks.in.create');
+    Route::post('/stocks/in', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'storeIn'])->name('stocks.in.store');
+    Route::get('/stocks/out', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'createOut'])->name('stocks.out.create');
+    Route::post('/stocks/out', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'storeOut'])->name('stocks.out.store');
+    Route::get('/stocks/opname', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'createOpname'])->name('stocks.opname.create');
+    Route::post('/stocks/opname', [App\Http\Controllers\AdminMiniMarket\StockController::class, 'storeOpname'])->name('stocks.opname.store');
+
     // Settings
     Route::get('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'index'])->name('settings.invoice.index');
     Route::put('/settings/invoice', [App\Http\Controllers\AdminMiniMarket\InvoiceSettingController::class, 'update'])->name('settings.invoice.update');

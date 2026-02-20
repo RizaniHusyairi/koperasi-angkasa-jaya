@@ -12,6 +12,12 @@
     </a>
 </li>
 <li>
+    <a href="{{ route('admin-mini-market.stocks.index') }}" class="{{ request()->routeIs('admin-mini-market.stocks.*') ? 'active-page' : '' }}">
+        <iconify-icon icon="mdi:clipboard-text-history-outline" class="menu-icon"></iconify-icon>
+        <span>Riwayat Mutasi Stok</span>
+    </a>
+</li>
+<li>
     <a href="{{ route('admin-mini-market.orders.index') }}" class="{{ request()->routeIs('admin-mini-market.orders.*') ? 'active-page' : '' }}">
         <iconify-icon icon="mdi:cart-outline" class="menu-icon"></iconify-icon>
         <span>Pesanan</span>

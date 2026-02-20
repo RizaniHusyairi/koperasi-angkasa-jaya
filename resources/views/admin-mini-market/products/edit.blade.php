@@ -59,13 +59,6 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="stock" class="form-label fw-semibold text-primary-light text-sm mb-8">Stok <span class="text-danger-600">*</span></label>
-                        <input type="number" class="form-control radius-8" id="stock" name="stock" placeholder="0" value="{{ old('stock', $product->stock) }}" required min="0">
-                        @error('stock')
-                            <div class="text-danger-600 text-sm mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
 
                     <div class="col-12">
                         <label for="description" class="form-label fw-semibold text-primary-light text-sm mb-8">Deskripsi Produk</label>
