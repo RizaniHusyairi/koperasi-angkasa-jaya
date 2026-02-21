@@ -44,7 +44,7 @@
         .logo { width: 80px; }
         .company-name { font-size: 18px; font-weight: bold; color: #E85D04; text-transform: uppercase; }
         .company-sub { font-size: 14px; font-weight: bold; color: #E85D04; }
-        .address { font-size: 10px; margin-top: 5px; color: #555; }
+        .address { font-size: 10px; margin-top: 5px; color: #555;  }
 
         /* Garis Pemisah Kop (Opsional, karena background sudah ada grafis, mungkin ini bisa ditipiskan atau dihapus) */
         .header-line {
@@ -124,7 +124,7 @@
                 <td width="15%">
                     <img src="{{ $setting && $setting->company_logo ? public_path('storage/' . $setting->company_logo) : public_path('assets/logo/logo_koperasi.png') }}" class="logo" alt="Logo">
                 </td>
-                <td width="85%">
+                <td width="85%" style="margin-left: auto;">
                     <div class="company-name">{{ $setting->company_name ?? 'PT. ANGKASA JAYA SERVIS' }}</div>
                     <div class="company-sub">Airport Service</div>
                     <div class="address">
@@ -224,7 +224,7 @@
         <div class="signature">
             Hormat kami,<br>
             {{ $setting->company_name ?? 'PT. Angkasa Jaya Servis' }}
-            <br><br><br><br> <div class="signature-name">Risna Amalia</div>
+            <br><br><br> <div class="signature-name">Risna Amalia</div>
             <div>Account Receivable</div>
         </div>
 
