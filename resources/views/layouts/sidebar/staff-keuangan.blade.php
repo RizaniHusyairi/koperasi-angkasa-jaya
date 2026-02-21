@@ -16,3 +16,9 @@
 
 <li class="sidebar-menu-group-title">Pengaturan</li>
 
+<li>
+    <a href="{{ route('staff-keuangan.settings.invoice.index') }}" class="{{ request()->routeIs('staff-keuangan.settings.invoice.*') ? 'active' : '' }}">
+        <iconify-icon icon="mdi:cog-outline" class="menu-icon"></iconify-icon>
+        <span>Pengaturan Invoice</span>
+    </a>
+</li>

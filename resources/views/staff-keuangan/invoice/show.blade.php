@@ -105,15 +105,15 @@
                         {{-- Baris Terbilang (Opsional - Agar mirip PDF) --}}
                         <tr>
                             <td colspan="2" class="px-4 py-3 fst-italic text-secondary-light">
-                                <span class="fw-semibold text-primary-light">Terbilang: </span> 
+                                    
+                                <span class="fw-semibold text-primary-light">Terbilang: {{ terbilang($invoice->total_amount) }} Rupiah</span> 
                                 {{-- Fungsi terbilang bisa ditambahkan di helper nanti, sementara hardcode/placeholder --}}
                                 
-                                @php
+                                <!-- @php
                                     // Contoh logic sederhana terbilang (sebaiknya dipindah ke Helper)
                                     $angka = $invoice->total_amount;
-                                    // ... logic terbilang ...
                                     echo "Harap cek nominal manual"; 
-                                @endphp 
+                                @endphp  -->
                                 
                             </td>
                         </tr>
@@ -122,15 +122,17 @@
             </div>
             
             {{-- Footer Info Transfer (Sesuai PDF) --}}
+            @php
+                $setting = \App\Models\StaffKeuanganSetting::first();
+            @endphp
             <div class="mt-24 p-16 border radius-8 d-flex align-items-start gap-3">
                 <iconify-icon icon="solar:card-outline" class="text-2xl text-primary-600 mt-1"></iconify-icon>
                 <div>
                     <h6 class="fw-bold mb-1 text-sm">Informasi Pembayaran</h6>
                     <p class="text-secondary-light text-sm mb-1">Silakan transfer pembayaran ke:</p>
                     <ul class="list-unstyled mb-0 text-sm fw-medium text-primary-900">
-                        <li>Bank: <span class="fw-bold">BANK TABUNGAN NEGARA (BTN)</span></li>
-                        <li>No. Rekening: <span class="fw-bold">200-188-000-1341</span></li>
-                        <li>A.N: <span class="fw-bold">PT ANGKASA JAYA SERVIS</span></li>
+                        <li>Bank: <span class="fw-bold">{{ $setting->bank_name ?? 'BANK TABUNGAN NEGARA (BTN)' }}</span></li>
+                        <li>No. Rekening: <span class="fw-bold">{{ $setting->bank_account ?? '200-188-000-1341 a/n PT ANGKASA JAYA SERVIS' }}</span></li>
                     </ul>
                 </div>
             </div>

@@ -116,18 +116,20 @@
 
     <div class="content-container">
 
+        @php
+            $setting = \App\Models\StaffKeuanganSetting::first();
+        @endphp
         <table class="header-table">
             <tr>
                 <td width="15%">
-                    <img src="{{ public_path('assets/logo/logo_koperasi.png') }}" class="logo" alt="Logo">
+                    <img src="{{ $setting && $setting->company_logo ? public_path('storage/' . $setting->company_logo) : public_path('assets/logo/logo_koperasi.png') }}" class="logo" alt="Logo">
                 </td>
                 <td width="85%">
-                    <div class="company-name">PT. ANGKASA JAYA SERVIS</div>
+                    <div class="company-name">{{ $setting->company_name ?? 'PT. ANGKASA JAYA SERVIS' }}</div>
                     <div class="company-sub">Airport Service</div>
                     <div class="address">
-                        Jalan Poros Bontang-Samarinda, Kel Sungai Siring Samarinda Utara<br>
-                        Bandar Udara Aji Pangeran Tumenggung Pranoto Samarinda, Kalimantan Timur<br>
-                        Telp: (0541) 2831593 | Email: ops@angkasajayaservis.co.id
+                        {!! nl2br(e($setting->company_address ?? "Jalan Poros Bontang-Samarinda, Kel Sungai Siring Samarinda Utara\nBandar Udara Aji Pangeran Tumenggung Pranoto Samarinda, Kalimantan Timur")) !!}<br>
+                        Telp: {{ $setting->company_phone ?? '(0541) 2831593' }} | Email: {{ $setting->company_email ?? 'ops@angkasajayaservis.co.id' }}
                     </div>
                 </td>
             </tr>
@@ -161,7 +163,8 @@
         <div style="margin-bottom: 10px; text-align: justify;">
             Dengan Hormat,<br>
             Sehubungan dengan adanya kegiatan {{ $invoice->activity }}, bersama ini kami mengirimkan invoice tagihan 
-            <strong>{{ $invoice->type }}</strong>. Mohon pembayaran dilakukan selambat-lambatnya 5 (lima) hari setelah tagihan diterima.
+            <strong>{{ $invoice->type }}</strong>. Mohon pembayaran dilakukan selambat-lambatnya 5 (lima) hari setelah tagihan diterima. Berikut kami sampaikan rincian tagihan dimaksud :
+
         </div>
 
         <table class="invoice-table">
@@ -209,22 +212,18 @@
             <table width="100%">
                 <tr>
                     <td width="30%"><strong>BANK</strong></td>
-                    <td>: BANK TABUNGAN NEGARA (BTN)</td>
+                    <td>: {{ $setting->bank_name ?? 'BANK TABUNGAN NEGARA (BTN)' }}</td>
                 </tr>
                 <tr>
                     <td><strong>NO. REKENING</strong></td>
-                    <td>: 200-188-000-1341</td>
-                </tr>
-                <tr>
-                    <td><strong>A.N</strong></td>
-                    <td>: PT ANGKASA JAYA SERVIS</td>
+                    <td>: {{ $setting->bank_account ?? '200-188-000-1341 a/n PT ANGKASA JAYA SERVIS' }}</td>
                 </tr>
             </table>
         </div>
 
         <div class="signature">
             Hormat kami,<br>
-            PT. Angkasa Jaya Servis
+            {{ $setting->company_name ?? 'PT. Angkasa Jaya Servis' }}
             <br><br><br><br> <div class="signature-name">Risna Amalia</div>
             <div>Account Receivable</div>
         </div>

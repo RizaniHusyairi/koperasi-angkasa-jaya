@@ -163,6 +163,10 @@ Route::middleware(['auth', 'role:staff-keuangan'])->prefix('staff-keuangan')->na
 
     Route::get('/invoice/{invoice}/pdf', [StaffKeuanganInvoice::class, 'streamPdf'])
     ->name('invoice.pdf');
+
+    // Invoice Settings
+    Route::get('/settings/invoice', [App\Http\Controllers\StaffKeuangan\InvoiceSettingController::class, 'index'])->name('settings.invoice.index');
+    Route::put('/settings/invoice', [App\Http\Controllers\StaffKeuangan\InvoiceSettingController::class, 'update'])->name('settings.invoice.update');
 });
 
 Route::middleware('auth')->group(function () {
