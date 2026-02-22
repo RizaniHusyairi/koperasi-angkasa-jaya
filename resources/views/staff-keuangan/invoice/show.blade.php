@@ -103,11 +103,9 @@
                             </td>
                         </tr>
                         @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-primary-light">
-                            <td class="text-end fw-bold text-primary-main px-4 py-3">TOTAL TAGIHAN</td>
-                            <td class="text-end fw-bold text-primary-main text-lg px-4 py-3">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
+                        <tr>
+                            <td class="text-start fw-bold px-4 py-3">TOTAL TAGIHAN</td>
+                            <td class="text-end fw-bold text-lg px-4 py-3">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
                         </tr>
                         {{-- Baris Terbilang (Opsional - Agar mirip PDF) --}}
                         <tr>
@@ -124,7 +122,8 @@
                                 
                             </td>
                         </tr>
-                    </tfoot>
+                    </tbody>
+                  
                 </table>
             </div>
             

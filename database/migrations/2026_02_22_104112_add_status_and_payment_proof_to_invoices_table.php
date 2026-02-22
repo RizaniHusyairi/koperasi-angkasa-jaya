@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            //
+            $table->string('status')->default('Belum dibayar')->after('date');
+            $table->string('payment_proof')->nullable()->after('status');
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            //
+            $table->dropColumn(['status', 'payment_proof']);
         });
     }
 };

@@ -39,7 +39,7 @@
                         <div class="d-flex align-items-center gap-4">
                             <div class="avatar-upload">
                                 <div class="avatar-preview">
-                                    <div id="imagePreview" style="background-image: url('{{ $setting && $setting->company_logo ? asset('storage/' . $setting->company_logo) : asset('assets/logo/logo_koperasi.png') }}'); width: 100%; height: 100%; background-size: cover; background-repeat: no-repeat; background-position: center;">
+                                    <div id="imagePreview" style="background-image: url('{{ $setting && $setting->company_logo ? asset('storage/' . $setting->company_logo) : asset('assets/logo/logo_koperasi.png') }}'); width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;">
                                     </div>
                                 </div>
                             </div>
