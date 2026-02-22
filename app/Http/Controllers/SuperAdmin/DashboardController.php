@@ -16,6 +16,10 @@ class DashboardController extends Controller
         $totalAnggotaAktif = Anggota::where('status_keanggotaan', 'Aktif')->count();
         $totalPengajuanPending = PengajuanPinjaman::pending()->count();
 
+        // Calculate Income and Expense
+        $totalPendapatan = \App\Models\Invoice::sum('total_amount');
+        $totalPengeluaran = 0; // Set to 0 temporarily as there's no specific Expense model
+
         // Monthly Stats (Cross-database compatible)
         $connection = \Illuminate\Support\Facades\DB::connection()->getDriverName();
         $dateFormat = $connection === 'sqlite' 
@@ -36,6 +40,8 @@ class DashboardController extends Controller
             'totalAnggota',
             'totalAnggotaAktif',
             'totalPengajuanPending',
+            'totalPendapatan',
+            'totalPengeluaran',
             'monthlyStats',
             'latestAnggota'
         ));

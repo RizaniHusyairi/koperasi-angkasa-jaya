@@ -72,17 +72,11 @@
                     </div>
                     <div class="">
                         <div class="d-flex justify-content-between gap-2">
-                            <div class="form-check style-check d-flex align-items-center">
-                                <input class="form-check-input border border-neutral-300" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">Ingat saya</label>
-                            </div>
-                            @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-primary-600 fw-medium">Lupa Password?</a>
-                            @endif
+                         
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">Masuk</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-12 py-16 w-100 radius-12 mt-32">Masuk</button>
                 </form>
             </div>
         </div>

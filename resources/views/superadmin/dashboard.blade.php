@@ -29,7 +29,42 @@
     </div>
 
     <div class="row gy-4">
-        <!-- Stats Cards -->
+        <!-- Keuangan Stats Cards -->
+        <div class="col-xxl-6 col-sm-12">
+            <div class="card p-0 shadow-none radius-12 border bg-gradient-start-1 h-100">
+                <div class="card-body p-24">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="w-64-px h-64-px bg-primary-600 rounded-circle d-flex justify-content-center align-items-center text-white text-2xl flex-shrink-0">
+                            <iconify-icon icon="mdi:finance"></iconify-icon>
+                        </span>
+                        <div>
+                            <span class="mb-1 fw-medium text-secondary-light">Total Pendapatan</span>
+                            <h4 class="mb-0 fw-bold">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-6 col-sm-12">
+            <div class="card p-0 shadow-none radius-12 border bg-gradient-start-2 h-100">
+                <div class="card-body p-24">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="w-64-px h-64-px bg-warning-600 rounded-circle d-flex justify-content-center align-items-center text-white text-2xl flex-shrink-0">
+                            <iconify-icon icon="mdi:cash-minus"></iconify-icon>
+                        </span>
+                        <div>
+                            <span class="mb-1 fw-medium text-secondary-light">Total Pengeluaran</span>
+                            <h4 class="mb-0 fw-bold">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row gy-4 mt-2">
+        <!-- Koperasi Stats Cards -->
         <div class="col-xxl-3 col-sm-6">
             <div class="card p-0 shadow-none radius-12 border bg-gradient-start-1 h-100">
                 <div class="card-body p-24">

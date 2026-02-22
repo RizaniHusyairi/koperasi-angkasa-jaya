@@ -6,14 +6,14 @@
         <h6 class="fw-semibold mb-0">Detail Invoice</h6>
         <ul class="d-flex align-items-center gap-2">
             <li class="fw-medium">
-                <a href="{{ route('staff-keuangan.dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                <a href="{{ route('superadmin.dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                     Dashboard
                 </a>
             </li>
             <li>-</li>
             <li class="fw-medium">
-                <a href="{{ route('staff-keuangan.invoice.index') }}" class="hover-text-primary">Invoice</a>
+                <a href="{{ route('superadmin.invoice.index') }}" class="hover-text-primary">Invoice</a>
             </li>
             <li>-</li>
             <li class="fw-medium">Detail</li>
@@ -28,16 +28,11 @@
                     <p class="text-secondary-light mb-0">Tanggal: {{ \Carbon\Carbon::parse($invoice->date)->locale('id')->isoFormat('D MMMM Y') }}</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    {{-- Tombol Print Sederhana --}}
-                    <a href="{{ route('staff-keuangan.invoice.pdf', $invoice->id) }}" target="_blank" class="btn btn-primary-100 text-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
+                    <a href="{{ route('superadmin.invoice.pdf', $invoice->id) }}" target="_blank" class="btn btn-primary-100 text-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
                         <iconify-icon icon="mingcute:print-line" class="text-xl"></iconify-icon>
                         Cetak PDF
                     </a>
-                    <a href="{{ route('staff-keuangan.invoice.edit', $invoice->id) }}" class="btn btn-warning-main radius-8 px-20 py-11 d-flex align-items-center gap-2">
-                        <iconify-icon icon="lucide:edit" class="text-xl"></iconify-icon>
-                        Edit
-                    </a>
-                    <a href="{{ route('staff-keuangan.invoice.index') }}" class="btn btn-secondary-light radius-8 px-20 py-11">Kembali</a>
+                    <a href="{{ route('superadmin.invoice.index') }}" class="btn btn-secondary-light radius-8 px-20 py-11">Kembali</a>
                 </div>
             </div>
 
@@ -71,7 +66,6 @@
                     <tbody>
                         @foreach($invoice->items as $item)
                         <tr>
-                            {{-- LOGIC STYLE BERDASARKAN TIPE --}}
                             <td class="
                                 px-4
                                 @if($item->item_type == 'header') fw-bold text-primary-main @endif
@@ -81,13 +75,11 @@
                             style="
                                 @if($item->item_type == 'item') padding-left: 3rem !important; @endif
                             ">
-                                {{-- Jika item biasa, tambahkan bullet/dash kecil biar rapi --}}
                                 @if($item->item_type == 'item') - @endif 
                                 {{ $item->description }}
                             </td>
                             
                             <td class="text-end px-4">
-                                {{-- Header biasanya tidak punya harga, jadi di-hide kalau 0 --}}
                                 @if($item->amount > 0)
                                     <span class="fw-medium text-primary-600">Rp {{ number_format($item->amount, 0, ',', '.') }}</span>
                                 @else
@@ -96,32 +88,20 @@
                             </td>
                         </tr>
                         @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-primary-light">
-                            <td class="text-end fw-bold text-primary-main px-4 py-3">TOTAL TAGIHAN</td>
-                            <td class="text-end fw-bold text-primary-main text-lg px-4 py-3">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
+                        <tr >
+                            <td class="text-start fw-bold px-4 py-3">TOTAL TAGIHAN</td>
+                            <td class="text-end fw-bold text-lg px-4 py-3">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
                         </tr>
-                        {{-- Baris Terbilang (Opsional - Agar mirip PDF) --}}
                         <tr>
-                            <td colspan="2" class="px-4 py-3 fst-italic text-secondary-light">
-                                    
-                                <span class="fw-semibold text-primary-light">Terbilang: {{ terbilang($invoice->total_amount) }} Rupiah</span> 
-                                {{-- Fungsi terbilang bisa ditambahkan di helper nanti, sementara hardcode/placeholder --}}
-                                
-                                <!-- @php
-                                    // Contoh logic sederhana terbilang (sebaiknya dipindah ke Helper)
-                                    $angka = $invoice->total_amount;
-                                    echo "Harap cek nominal manual"; 
-                                @endphp  -->
-                                
+                            <td colspan="2" class="px-4 py-3 fst-italic">
+                                <span class="fw-semibold">Terbilang: {{ terbilang($invoice->total_amount) }} Rupiah</span> 
                             </td>
                         </tr>
-                    </tfoot>
+                    </tbody>
+                    
                 </table>
             </div>
             
-            {{-- Footer Info Transfer (Sesuai PDF) --}}
             @php
                 $setting = \App\Models\StaffKeuanganSetting::first();
             @endphp
@@ -141,13 +121,12 @@
     </div>
 </div>
 
-{{-- CSS Khusus untuk Print (Agar tombol hilang saat diprint) --}}
 <style>
     @media print {
-        .dashboard-main-body > div:first-child, /* Breadcrumb */
-        .btn, /* Semua tombol */
-        .dashboard-sidebar, /* Sidebar (jika ada) */
-        .dashboard-header /* Header atas (jika ada) */
+        .dashboard-main-body > div:first-child,
+        .btn,
+        .dashboard-sidebar,
+        .dashboard-header
         {
             display: none !important;
         }

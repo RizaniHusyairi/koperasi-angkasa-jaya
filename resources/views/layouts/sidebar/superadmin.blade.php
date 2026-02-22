@@ -23,3 +23,12 @@
         <span>Anggota Koperasi</span>
     </a>
 </li>
+
+<li class="sidebar-menu-group-title">Keuangan</li>
+
+<li>
+    <a href="{{ route('superadmin.invoice.index') }}" class="{{ request()->routeIs('superadmin.invoice.*') ? 'active' : '' }}">
+        <iconify-icon icon="mdi:file-document-outline" class="menu-icon"></iconify-icon>
+        <span>Invoice</span>
+    </a>
+</li>

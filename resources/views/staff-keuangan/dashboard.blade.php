@@ -30,7 +30,7 @@
                             </span>
                             <div>
                                 <span class="mb-2 fw-medium text-secondary-light text-sm">Pendapatan</span>
-                                <h6 class="fw-semibold">Rp 0</h6>
+                                <h6 class="fw-semibold">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h6>
                             </div>
                         </div>
                     </div>

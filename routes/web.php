@@ -74,6 +74,10 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('superadmin')->name('sup
     Route::post('/anggota/{anggota}/simpanan-pokok', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'storePokok'])->name('anggota.simpanan.pokok.store');
     Route::put('/anggota/{anggota}/simpanan-pokok', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'updatePokok'])->name('anggota.simpanan.pokok.update');
     Route::post('/anggota/{anggota}/simpanan-wajib', [App\Http\Controllers\SuperAdmin\SimpananController::class, 'storeWajib'])->name('anggota.simpanan.wajib.store');
+    
+    // Invoice Routes for Super Admin
+    Route::resource('invoice', App\Http\Controllers\SuperAdmin\InvoiceController::class)->only(['index', 'show']);
+    Route::get('/invoice/{invoice}/pdf', [App\Http\Controllers\SuperAdmin\InvoiceController::class, 'streamPdf'])->name('invoice.pdf');
 });
 
 // Anggota Routes
