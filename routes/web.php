@@ -167,6 +167,8 @@ Route::middleware(['auth', 'role:staff-keuangan'])->prefix('staff-keuangan')->na
 
     Route::get('/invoice/{invoice}/pdf', [StaffKeuanganInvoice::class, 'streamPdf'])
     ->name('invoice.pdf');
+    Route::post('/invoice/{invoice}/upload-proof', [StaffKeuanganInvoice::class, 'uploadProof'])
+    ->name('invoice.upload-proof');
 
     // Invoice Settings
     Route::get('/settings/invoice', [App\Http\Controllers\StaffKeuangan\InvoiceSettingController::class, 'index'])->name('settings.invoice.index');

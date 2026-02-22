@@ -162,4 +162,30 @@ class InvoiceController extends Controller
         $filename = 'Invoice-' . str_replace(['/', '\\'], '-', $invoice->invoice_number) . '.pdf';
         return $pdf->stream($filename);
     }
+
+    /**
+     * Upload proof of payment and change status.
+     */
+    public function uploadProof(Request $request, Invoice $invoice)
+    {
+        $request->validate([
+            'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($request->hasFile('payment_proof')) {
+            $file = $request->file('payment_proof');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->move(public_path('uploads/invoices'), $filename);
+
+            $invoice->update([
+                'payment_proof' => 'uploads/invoices/' . $filename,
+                'status' => 'Sudah dibayar'
+            ]);
+
+            return redirect()->route('staff-keuangan.invoice.show', $invoice->id)
+                ->with('success', 'Bukti pembayaran berhasil diunggah dan status telah diperbarui.');
+        }
+
+        return back()->with('error', 'Gagal mengunggah bukti pembayaran.');
+    }
 }

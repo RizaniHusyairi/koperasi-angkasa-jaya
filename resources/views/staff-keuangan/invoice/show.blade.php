@@ -24,7 +24,14 @@
         <div class="card-body p-24">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                 <div>
-                    <h5 class="fw-semibold mb-1">Invoice #{{ $invoice->invoice_number }}</h5>
+                    <h5 class="fw-semibold mb-1 d-flex align-items-center gap-2">
+                        Invoice #{{ $invoice->invoice_number }}
+                        @if($invoice->status == 'Sudah dibayar')
+                            <span class="bg-success-focus text-success-main px-12 py-4 rounded-pill fw-medium text-sm">Sudah dibayar</span>
+                        @else
+                            <span class="bg-danger-focus text-danger-main px-12 py-4 rounded-pill fw-medium text-sm">Belum dibayar</span>
+                        @endif
+                    </h5>
                     <p class="text-secondary-light mb-0">Tanggal: {{ \Carbon\Carbon::parse($invoice->date)->locale('id')->isoFormat('D MMMM Y') }}</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -135,6 +142,46 @@
                         <li>No. Rekening: <span class="fw-bold">{{ $setting->bank_account ?? '200-188-000-1341 a/n PT ANGKASA JAYA SERVIS' }}</span></li>
                     </ul>
                 </div>
+            </div>
+
+            {{-- Informasi atau Form Upload Bukti Pembayaran --}}
+            <div class="mt-24">
+                <hr>
+                <h6 class="fw-bold mb-16 text-md mt-24">Bukti Pembayaran</h6>
+                
+                @if($invoice->payment_proof)
+                    <div class="mb-16">
+                        <p class="text-success-main fw-medium d-flex align-items-center gap-2 mb-12">
+                            <iconify-icon icon="mingcute:check-circle-fill" class="text-xl"></iconify-icon>
+                            Bukti pembayaran telah diunggah.
+                        </p>
+                        <div class="border radius-8 p-16 d-inline-block bg-base-50">
+                            <img src="{{ asset($invoice->payment_proof) }}" alt="Bukti Pembayaran" class="img-fluid radius-8" style="max-width: 400px; max-height: 400px; object-fit: contain;">
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-info bg-info-100 text-info-600 border-info-200 p-16 d-flex align-items-start gap-2 radius-8">
+                        <iconify-icon icon="mingcute:information-line" class="text-xl mt-1"></iconify-icon>
+                        <div>
+                            <h6 class="text-info-600 text-md mb-2 fw-semibold">Upload Bukti Pembayaran</h6>
+                            <p class="mb-12 text-sm">Silakan unggah bukti transfer/pembayaran dari mitra untuk mengubah status invoice menjadi "Sudah dibayar".</p>
+                            
+                            <form action="{{ route('staff-keuangan.invoice.upload-proof', $invoice->id) }}" method="POST" enctype="multipart/form-data" class="d-flex align-items-end gap-3 flex-wrap">
+                                @csrf
+                                <div class="form-group mb-0 flex-grow-1" style="max-width: 400px;">
+                                    <input class="form-control radius-8 bg-base" type="file" name="payment_proof" id="payment_proof" accept="image/jpeg,image/png,image/jpg" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
+                                    <iconify-icon icon="mingcute:upload-2-line" class="text-lg"></iconify-icon>
+                                    Unggah & Verifikasi
+                                </button>
+                            </form>
+                            @error('payment_proof')
+                                <div class="text-danger mt-8 text-sm fw-medium">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                @endif
             </div>
 
         </div>

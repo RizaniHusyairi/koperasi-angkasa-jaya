@@ -41,6 +41,7 @@
                             <th scope="col">Mitra</th>
                             <th scope="col">Tanggal</th>
                             <th scope="col">Total</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -52,6 +53,13 @@
                             <td>{{ $invoice->partner_name }}</td>
                             <td>{{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}</td>
                             <td>Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</td>
+                            <td>
+                                @if($invoice->status == 'Sudah dibayar')
+                                    <span class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Sudah dibayar</span>
+                                @else
+                                    <span class="bg-danger-focus text-danger-main px-24 py-4 rounded-pill fw-medium text-sm">Belum dibayar</span>
+                                @endif
+                            </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <a href="{{ route('staff-keuangan.invoice.show', $invoice->id) }}" class="w-32-px h-32-px bg-info-focus text-info-main rounded-circle d-inline-flex align-items-center justify-content-center" title="Detail">

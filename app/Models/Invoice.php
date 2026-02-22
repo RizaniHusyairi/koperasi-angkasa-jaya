@@ -16,6 +16,8 @@ class Invoice extends Model
         'activity',
         'total_amount',
         'date',
+        'status',
+        'payment_proof',
     ];
 
     public function items()
